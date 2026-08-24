@@ -45,31 +45,45 @@ surfaces a disclaimer and this flag keeps it honest.
 
 ## Where the offers come from
 
-**Curated, not scraped.** That is a deliberate decision, and the research behind
-it:
+**Curated, not scraped.** The research behind that:
 
-- No Israeli benefit club exposes a public API. Offers sit behind member logins.
-- `paisplus.co.il` returns **HTTP 403 to automated fetchers**, despite being
-  search-indexed.
+- No Israeli benefit club exposes a public API.
+- `paisplus.co.il` returns **HTTP 403 "Security Violation"** to this project's
+  build environment, and `pais.co.il` resets the TLS connection outright — an
+  IP-level WAF block, which a real Chromium hits identically. Those pages are
+  public and load fine from a normal Israeli connection; they are simply not
+  reachable from a datacenter, and working around that would mean evading an
+  access control rather than reading a public page.
 - `bonus.leumi.co.il` and `rewards.americanexpress.co.il` are JavaScript-rendered
-  SPAs — a plain fetch gets only the page shell.
+  SPAs — a plain fetch returns only the page shell.
 - **FID / FinDiscount** is mobile-only, with no web listing, API, or export. Its
   200+ club catalog is its paid product; extracting it is out of scope.
 
 So the catalog has two sources:
 
-1. **Seed** (`supabase/seed/offers.ts`) — 41 *standing* benefits that each
-   program documents publicly on its own site, every row carrying its
-   `source_url`. Time-limited merchant promotions are deliberately **not**
-   seeded: they change weekly and inventing plausible-looking ones would be
-   worse than an empty feed. `verified_at` is left NULL, because these were read
-   off marketing pages rather than confirmed inside a member account.
+1. **Seed** (`supabase/seed/offers.ts`) — 75 offers across the five programs,
+   each carrying the public `source_url` it came from. The Pais Plus set is
+   venue-level and concrete (cinema at 9 ₪ on Thursdays, ספארי רמת גן at 60 ₪,
+   מדעטק at 36 ₪ …). Prices drawn from a seasonal campaign say so in
+   `description_he` and need re-checking; `verified_at` is left NULL on every
+   seed row, because these came off public pages rather than from inside a
+   member account.
 2. **Members** — the quick-add form. You are already looking at an offer in your
    club app; capturing it takes about twenty seconds, and then the whole group
    has it.
 
 The offers layer is deliberately isolated so a licensed feed could replace or
 supplement the seed later without touching the UI.
+
+### Asking is not always free
+
+Pais gives each subscriber a **capped monthly entitlement quota** — 12 for כסף
+(3 food, 6 cinema/shows, 3 other), 18 for פלטינום — which does not carry over
+month to month. So asking a friend to book you a Pais benefit spends something
+scarce of theirs. Offers carry a `costs_quota` flag; where it is set the card
+warns you, and the WhatsApp message says it out loud:
+
+> (יודע שזה מנצל לך זכאות חודשית — רק אם זה מסתדר לך)
 
 ---
 
@@ -138,7 +152,7 @@ only by its owner and by people who share a group with them.
 ## Verification
 
 ```bash
-npm test        # 15 unit tests: phone normalization, wa.me links, Hebrew messages
+npm test        # 16 unit tests: phone normalization, wa.me links, Hebrew messages
 npm run typecheck
 npm run build
 npm run test:db # applies migrations to a scratch Postgres and runs the RLS suite

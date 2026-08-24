@@ -49,7 +49,9 @@ export const PROGRAMS: SeedProgram[] = [
     join_url: "https://www.pais.co.il/info/paisplus.aspx",
     terms_url: "https://www.pais.co.il/info/mpais-faq.aspx",
     notes_he:
-      "מועדון ההטבות של מנויי מפעל הפיס: הצגות, מופעים, סרטים, מסעדות ונופש.",
+      "מועדון ההטבות של מנויי מפעל הפיס: הצגות, מופעים, סרטים, מסעדות ונופש. " +
+      "למנוי יש מכסת זכאויות חודשית (12 בכסף, 18 בפלטינום) שאינה ניתנת לצבירה, " +
+      "ולכן כל בקשה מנצלת לו זכאות.",
     sort_order: 30,
   },
   {

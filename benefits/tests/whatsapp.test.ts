@@ -87,6 +87,7 @@ const offer: OfferWithHolders = {
   discount_pct: 50,
   description_he: null,
   shareability: "transferable",
+  costs_quota: false,
   valid_from: null,
   valid_until: "2026-12-31",
   source_url: null,
@@ -130,6 +131,12 @@ describe("buildAskMessage", () => {
   it("omits the expiry line when the offer has no end date", () => {
     const undated = { ...offer, valid_until: null };
     expect(buildAskMessage(undated, "דנה")).not.toContain("בתוקף עד");
+  });
+
+  it("says so up front when the favour spends a monthly entitlement", () => {
+    expect(buildAskMessage(offer, "דנה")).not.toContain("זכאות חודשית");
+    const quota = { ...offer, costs_quota: true };
+    expect(buildAskMessage(quota, "דנה")).toContain("מנצל לך זכאות חודשית");
   });
 });
 

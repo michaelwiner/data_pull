@@ -54,6 +54,8 @@ export interface Offer {
   discount_pct: number | null;
   description_he: string | null;
   shareability: Shareability;
+  /** Redeeming this consumes one of the holder's capped monthly entitlements. */
+  costs_quota: boolean;
   valid_from: string | null;
   valid_until: string | null;
   source_url: string | null;

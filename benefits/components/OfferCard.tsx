@@ -134,18 +134,25 @@ export default function OfferCard({
                 ההטבה כבר שלכם — אין את מי לבקש.
               </p>
             ) : (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {othersWhoHoldIt.map((holder) => (
-                  <AskButton
-                    key={holder.id}
-                    offer={offer}
-                    holder={holder}
-                    askerName={askerName}
-                    groupId={groupId}
-                    siteUrl={siteUrl}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {othersWhoHoldIt.map((holder) => (
+                    <AskButton
+                      key={holder.id}
+                      offer={offer}
+                      holder={holder}
+                      askerName={askerName}
+                      groupId={groupId}
+                      siteUrl={siteUrl}
+                    />
+                  ))}
+                </div>
+                {offer.costs_quota && (
+                  <p className="mt-2 text-xs text-ink-faint">
+                    ⚠️ שימוש בהטבה מנצל אחת מהזכאויות החודשיות של מי שתבקשו.
+                  </p>
+                )}
+              </>
             )}
           </>
         )}

@@ -105,6 +105,12 @@ export function buildAskMessage(
     lines.push("אפשר שנתאם לקנות ביחד, או שתקנה ואחזיר לך?");
   }
 
+  // Say it out loud when the favour costs them a capped monthly entitlement,
+  // rather than letting them discover it after they have agreed.
+  if (offer.costs_quota) {
+    lines.push("(יודע שזה מנצל לך זכאות חודשית — רק אם זה מסתדר לך)");
+  }
+
   if (offerUrl) {
     lines.push("");
     lines.push(offerUrl);

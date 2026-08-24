@@ -81,6 +81,11 @@ create table if not exists public.offers (
   valid_until   date,
   source_url    text,
   image_url     text,
+  -- Some clubs cap how many benefits a member may redeem per month (Pais gives
+  -- a כסף subscriber 12, a פלטינום 18, non-cumulative). Asking such a member to
+  -- use one spends a scarce entitlement of theirs, so the card says so instead
+  -- of implying the favour is free.
+  costs_quota   boolean not null default false,
   -- NULL identifies a seed row, so re-seeding never clobbers member contributions.
   created_by    uuid references public.profiles (id) on delete set null,
   -- Stable identity for seed upserts only.

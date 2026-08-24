@@ -58,6 +58,7 @@ async function main() {
       discount_text: offer.discount_text,
       description_he: offer.description_he,
       shareability: offer.shareability,
+      costs_quota: offer.costs_quota ?? false,
       source_url: offer.source_url,
       status: "active" as const,
     };

@@ -185,6 +185,7 @@ returns table (
   discount_pct   integer,
   description_he text,
   shareability   text,
+  costs_quota    boolean,
   valid_from     date,
   valid_until    date,
   source_url     text,
@@ -207,7 +208,7 @@ begin
     select
       o.id, o.program_id, o.group_id, o.title_he, o.merchant, o.category,
       o.discount_text, o.discount_pct, o.description_he, o.shareability,
-      o.valid_from, o.valid_until, o.source_url, o.image_url, o.created_by,
+      o.costs_quota, o.valid_from, o.valid_until, o.source_url, o.image_url, o.created_by,
       o.verified_at, o.status,
       to_json(p) as program,
       coalesce(h.holders, '[]'::json) as holders
