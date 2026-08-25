@@ -1,0 +1,678 @@
+<title>הטבות ביחד</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&display=swap">
+
+<style>
+  /* Light palette. Neutrals carry a slight blue bias toward the brand, matching
+     the tokens in tailwind.config.ts rather than defaulting to a flat grey. */
+  :root {
+    direction: rtl;
+
+    --ground:      #f4f6fa;
+    --card:        #ffffff;
+    --card-sunk:   #f4f6fa;
+    --ink:         #12151c;
+    --muted:       #5b6472;
+    --faint:       #8b94a3;
+    --line:        #e3e7ee;
+
+    --brand:       #2b56d4;
+    --brand-str:   #2244ab;
+    --brand-soft:  #eef4ff;
+    --brand-line:  #c9daff;
+
+    --wa:          #25d366;
+    --wa-ink:      #06300f;
+
+    --ok-bg:       #ecfdf5;  --ok-fg:    #047857;
+    --warn-bg:     #fffbeb;  --warn-fg:  #b45309;
+    --mute-bg:     #f1f5f9;  --mute-fg:  #475569;
+    --alert-bg:    #fef2f2;  --alert-fg: #b91c1c;
+
+    --shadow:      0 1px 2px rgba(18,21,28,.06), 0 4px 16px rgba(18,21,28,.06);
+    --sheet-veil:  rgba(18,21,28,.45);
+
+    --radius:      16px;
+    --maxw:        600px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:     #0e1116;
+      --card:       #161a22;
+      --card-sunk:  #1c212b;
+      --ink:        #e9edf5;
+      --muted:      #a3adbe;
+      --faint:      #7c8698;
+      --line:       #262d3a;
+
+      --brand:      #7ba0ff;
+      --brand-str:  #a8c1ff;
+      --brand-soft: #17243f;
+      --brand-line: #2c3f6b;
+
+      --wa:         #25d366;
+      --wa-ink:     #06240f;
+
+      --ok-bg:      #0d2a20;  --ok-fg:    #5ee9a4;
+      --warn-bg:    #2c2210;  --warn-fg:  #fbbf24;
+      --mute-bg:    #1c222c;  --mute-fg:  #9aa4b4;
+      --alert-bg:   #2b1416;  --alert-fg: #fca5a5;
+
+      --shadow:     0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+      --sheet-veil: rgba(0,0,0,.6);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:     #0e1116;
+    --card:       #161a22;
+    --card-sunk:  #1c212b;
+    --ink:        #e9edf5;
+    --muted:      #a3adbe;
+    --faint:      #7c8698;
+    --line:       #262d3a;
+
+    --brand:      #7ba0ff;
+    --brand-str:  #a8c1ff;
+    --brand-soft: #17243f;
+    --brand-line: #2c3f6b;
+
+    --wa:         #25d366;
+    --wa-ink:     #06240f;
+
+    --ok-bg:      #0d2a20;  --ok-fg:    #5ee9a4;
+    --warn-bg:    #2c2210;  --warn-fg:  #fbbf24;
+    --mute-bg:    #1c222c;  --mute-fg:  #9aa4b4;
+    --alert-bg:   #2b1416;  --alert-fg: #fca5a5;
+
+    --shadow:     0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+    --sheet-veil: rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Assistant", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  bdi { unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 16px 96px;
+  }
+
+  /* ---------------------------------------------------------------- banner */
+  .banner {
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-line);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin: 16px 0 20px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .banner b { color: var(--brand-str); }
+
+  /* ---------------------------------------------------------------- header */
+  .head { display: flex; align-items: flex-start; gap: 12px; }
+  .head h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .head p { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+
+  .roster { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .who {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 10px 4px 6px;
+    font-size: 13px; color: var(--muted);
+  }
+  .who .av { width: 22px; height: 22px; font-size: 10px; }
+  .who.me { border-color: var(--brand-line); background: var(--brand-soft); color: var(--brand-str); }
+
+  .av {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 999px;
+    background: var(--brand-soft); color: var(--brand-str);
+    border: 1px solid var(--brand-line);
+    font-size: 11px; font-weight: 700; line-height: 1;
+    flex: none;
+  }
+
+  /* --------------------------------------------------------------- filters */
+  .filters {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--ground);
+    padding: 16px 0 10px;
+    margin-top: 20px;
+  }
+
+  .search {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 12px;
+    padding: 11px 14px;
+    font: inherit;
+    font-size: 16px;
+  }
+  .search::placeholder { color: var(--faint); }
+
+  .chips {
+    display: flex; gap: 8px; margin-top: 10px;
+    overflow-x: auto; padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+
+  .chip {
+    flex: none;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 7px 13px;
+    font: inherit; font-size: 13.5px; font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--brand-soft);
+    border-color: var(--brand);
+    color: var(--brand-str);
+  }
+
+  .tally { font-size: 13.5px; color: var(--muted); padding: 2px 2px 0; }
+
+  /* ----------------------------------------------------------------- cards */
+  .feed { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; list-style: none; padding: 0; }
+
+  .offer {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 15px;
+  }
+  .offer.gap { opacity: .72; }
+
+  .otop { display: flex; gap: 11px; align-items: flex-start; }
+
+  .badge {
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--pc-soft); font-size: 19px; flex: none;
+  }
+
+  .pname { font-size: 12px; font-weight: 700; color: var(--pc); margin: 0; }
+
+  /* Program colours are brand colours chosen for a light ground (Leumi navy,
+     for one), so each card carries a lightened twin as --pc-d and the theme
+     blocks pick between them. Both are always defined inline on the card, so
+     there is no state where the colour is missing. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .pname { color: var(--pc-d); }
+    :root:not([data-theme="light"]) .badge { background: var(--pc-soft-d); }
+  }
+  :root[data-theme="dark"] .pname { color: var(--pc-d); }
+  :root[data-theme="dark"] .badge { background: var(--pc-soft-d); }
+  .otitle { margin: 2px 0 0; font-size: 16.5px; font-weight: 700; line-height: 1.3; text-wrap: balance; }
+  .omerchant { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+
+  .odiscount { margin: 12px 0 0; font-size: 19px; font-weight: 700; color: var(--brand-str); }
+  .odesc { margin: 6px 0 0; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+  .pill {
+    border-radius: 999px; padding: 4px 10px;
+    font-size: 12px; font-weight: 600;
+    background: var(--mute-bg); color: var(--mute-fg);
+  }
+  .pill.share-transferable      { background: var(--ok-bg);   color: var(--ok-fg); }
+  .pill.share-presence_required { background: var(--warn-bg); color: var(--warn-fg); }
+  .pill.share-personal_only     { background: var(--mute-bg); color: var(--mute-fg); }
+  .pill.cat { background: var(--card-sunk); color: var(--muted); font-weight: 500; }
+
+  .who-row {
+    display: flex; align-items: center; gap: 9px;
+    border-top: 1px solid var(--line);
+    margin-top: 14px; padding-top: 12px;
+  }
+  .stack { display: flex; flex: none; }
+  .stack .av { width: 26px; height: 26px; font-size: 10px; margin-inline-start: -7px; }
+  .stack .av:first-child { margin-inline-start: 0; }
+  .who-text { font-size: 13.5px; color: var(--muted); margin: 0; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+  .ask {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--wa); color: var(--wa-ink);
+    border: 0; border-radius: 12px;
+    padding: 10px 15px;
+    font: inherit; font-size: 14px; font-weight: 700;
+    cursor: pointer;
+  }
+  .ask:hover { filter: brightness(1.05); }
+
+  .note { margin: 9px 0 0; font-size: 12.5px; color: var(--faint); line-height: 1.5; }
+  .note.quota { color: var(--warn-fg); }
+
+  .joinlink {
+    display: inline-block; margin-top: 4px;
+    font-size: 13.5px; font-weight: 700; color: var(--brand);
+  }
+
+  .srclink { display: inline-block; margin-top: 11px; font-size: 12px; color: var(--faint); }
+
+  .empty {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 40px 20px; text-align: center;
+    margin-top: 12px;
+  }
+  .empty p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+  .empty strong { display: block; font-size: 16px; color: var(--ink); }
+
+  /* ----------------------------------------------------------------- sheet */
+  .veil {
+    position: fixed; inset: 0; z-index: 60;
+    background: var(--sheet-veil);
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .veil[hidden] { display: none; }
+
+  .sheet {
+    background: var(--card);
+    width: 100%; max-width: var(--maxw);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+    max-height: 86vh; overflow-y: auto;
+    animation: rise .22s ease-out;
+  }
+  @keyframes rise { from { transform: translateY(18px); opacity: .6 } to { transform: none; opacity: 1 } }
+  @media (prefers-reduced-motion: reduce) { .sheet { animation: none } }
+
+  .sheet h2 { margin: 0; font-size: 18px; font-weight: 700; }
+  .sheet .lede { margin: 5px 0 14px; font-size: 13.5px; color: var(--muted); }
+
+  .bubble {
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-line);
+    border-radius: 14px;
+    padding: 13px 15px;
+    font-size: 14.5px; line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .sheet-foot { display: flex; gap: 8px; margin-top: 15px; }
+  .btn {
+    flex: 1;
+    border-radius: 12px; padding: 11px 14px;
+    font: inherit; font-size: 14.5px; font-weight: 700;
+    cursor: pointer; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink);
+  }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  :root[data-theme="dark"] .btn.primary { color: #0e1116; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .btn.primary { color: #0e1116; }
+  }
+
+  .foot {
+    margin-top: 28px; padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--faint); line-height: 1.6;
+  }
+</style>
+
+<div class="wrap" lang="he">
+  <div class="banner">
+    <b>הדגמה.</b> החברים כאן בדויים, אין התחברות ושום דבר לא נשמר.
+    ההטבות עצמן אמיתיות ונאספו מדפים פומביים של המועדונים.
+  </div>
+
+  <header class="head">
+    <div>
+      <h1 id="gname"></h1>
+      <p id="gsub"></p>
+    </div>
+  </header>
+  <div class="roster" id="roster"></div>
+
+  <div class="filters">
+    <input id="q" class="search" type="search" placeholder="חיפוש הטבה או בית עסק…" aria-label="חיפוש הטבות">
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <p class="tally" id="tally"></p>
+  <ul class="feed" id="feed"></ul>
+
+  <p class="foot">
+    זו הדגמה של אפליקציה אמיתית. חלק מהמחירים פורסמו במבצע עונתי ומסומנים ככאלה —
+    כדאי לאמת מול המועדון לפני שמבקשים. מועדונים מסוימים מגבילים הטבות לחבר עצמו,
+    ולכן ההטבות מסומנות לפי מה שניתן להעביר.
+  </p>
+</div>
+
+<div class="veil" id="veil" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <h2 id="sheet-title"></h2>
+    <p class="lede" id="sheet-lede"></p>
+    <div class="bubble" id="sheet-msg"></div>
+    <div class="sheet-foot">
+      <button class="btn primary" id="sheet-close" type="button">סגירה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DATA = {"groupName":"החבר׳ה","members":[{"id":"u1","name":"מיכאל","you":true},{"id":"u2","name":"דנה","you":false},{"id":"u3","name":"יוסי","you":false},{"id":"u4","name":"נועה","you":false},{"id":"u5","name":"אורי","you":false}],"offers":[{"id":"hot-digital-wallet","title":"ארנק דיגיטלי — שוברים למותגים","merchant":"מותגי אופנה, בית, ספורט וטיפוח","category":"fashion","discount":"עד 20% הנחה","description":"שוברים דיגיטליים למותגים, כלי בית, צעצועים, ריהוט, מסעדות ובתי קפה. השובר עובר בקלות.","shareability":"transferable","costsQuota":false,"sourceUrl":"https://www.hot.co.il/","program":{"slug":"hot-club","name":"מועדון צרכנות HOT","emoji":"🛒","color":"#e4002b","colorDark":"#e87389","soft":"rgba(228, 0, 43, 0.13)","softDark":"rgba(232, 115, 137, 0.16)","joinUrl":"https://www.hot.co.il/"},"holders":[{"id":"u3","name":"יוסי","you":false}]},{"id":"leumi-bonus-servicemen","title":"הטבות למשרתים","merchant":"בנק לאומי","category":"other","discount":"מסלול הטבות ייעודי","description":"קטגוריית הטבות ייעודית למשרתי מילואים ומשרתי כוחות הביטחון.","shareability":"presence_required","costsQuota":false,"sourceUrl":"https://bonus.leumi.co.il/category/1627","program":{"slug":"leumi-bonus","name":"לאומי בונוס","emoji":"💳","color":"#0f4c8a","colorDark":"#73ade8","soft":"rgba(15, 76, 138, 0.13)","softDark":"rgba(115, 173, 232, 0.16)","joinUrl":"https://www.leumi.co.il/he/bonus"},"holders":[{"id":"u1","name":"מיכאל","you":true}]},{"id":"hot-travel","title":"הטבות תיירות ונופש","merchant":"חברות תיירות ומלונות","category":"travel","discount":"מחירי מועדון","description":"הזמנה שמבצע החבר עבור מי שנוסע — לרוב ניתנת להעברה.","shareability":"transferable","costsQuota":false,"sourceUrl":"https://www.hot.co.il/","program":{"slug":"hot-club","name":"מועדון צרכנות HOT","emoji":"🛒","color":"#e4002b","colorDark":"#e87389","soft":"rgba(228, 0, 43, 0.13)","softDark":"rgba(232, 115, 137, 0.16)","joinUrl":"https://www.hot.co.il/"},"holders":[{"id":"u3","name":"יוסי","you":false}]},{"id":"pais-roladin","title":"הנחה לחברי מועדון","merchant":"רולדין","category":"food","discount":"הנחת מנויים","description":null,"shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"miluim-business-discounts","title":"הנחות בבתי עסק למשרתי מילואים","merchant":"בתי עסק ורשתות משתתפים","category":"other","discount":"הנחה בהצגת תעודה","description":"ניתן בהצגת תעודת משרת מילואים, ולכן החבר עצמו צריך להיות שם.","shareability":"presence_required","costsQuota":false,"sourceUrl":"https://www.miluim.idf.il/","program":{"slug":"miluim","name":"משרתי מילואים","emoji":"🎖️","color":"#4a5d3a","colorDark":"#acc09a","soft":"rgba(74, 93, 58, 0.13)","softDark":"rgba(172, 192, 154, 0.16)","joinUrl":"https://www.matzdiim.co.il/"},"holders":[{"id":"u1","name":"מיכאל","you":true},{"id":"u5","name":"אורי","you":false}]},{"id":"hot-electronics","title":"הנחות בחשמל ומוצרים לבית","merchant":"רשתות חשמל ומוצרי בית","category":"electronics","discount":"הנחת מועדון","description":null,"shareability":"presence_required","costsQuota":false,"sourceUrl":"https://www.hot.co.il/","program":{"slug":"hot-club","name":"מועדון צרכנות HOT","emoji":"🛒","color":"#e4002b","colorDark":"#e87389","soft":"rgba(228, 0, 43, 0.13)","softDark":"rgba(232, 115, 137, 0.16)","joinUrl":"https://www.hot.co.il/"},"holders":[{"id":"u3","name":"יוסי","you":false}]},{"id":"hot-14k-businesses","title":"הנחות בכ-14,000 בתי עסק","merchant":"רשתות ובתי עסק בכל הארץ","category":"other","discount":"הנחה במעמד החיוב","description":"ההנחה מוצמדת לכרטיס המועדון, ולכן החבר עצמו צריך לשלם או להיות בקופה.","shareability":"presence_required","costsQuota":false,"sourceUrl":"https://www.hot.co.il/","program":{"slug":"hot-club","name":"מועדון צרכנות HOT","emoji":"🛒","color":"#e4002b","colorDark":"#e87389","soft":"rgba(228, 0, 43, 0.13)","softDark":"rgba(232, 115, 137, 0.16)","joinUrl":"https://www.hot.co.il/"},"holders":[{"id":"u3","name":"יוסי","you":false}]},{"id":"hot-supermarkets","title":"הנחות ברשתות המזון","merchant":"רשתות מזון","category":"food","discount":"הנחה קבועה בקופה","description":null,"shareability":"presence_required","costsQuota":false,"sourceUrl":"https://www.hot.co.il/","program":{"slug":"hot-club","name":"מועדון צרכנות HOT","emoji":"🛒","color":"#e4002b","colorDark":"#e87389","soft":"rgba(228, 0, 43, 0.13)","softDark":"rgba(232, 115, 137, 0.16)","joinUrl":"https://www.hot.co.il/"},"holders":[{"id":"u3","name":"יוסי","you":false}]},{"id":"pais-ramilevy","title":"הנחות על קניות מזון","merchant":"רמי לוי","category":"food","discount":"עד 10% הנחה","description":"הטבת מזון קבועה למנויי הפיס. מנוצלת מתוך מכסת הטבות המזון החודשית.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://www.mako.co.il/finances-consumer/Article-8406230a1953791026.htm","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"leumi-bonus-checkout-discounts","title":"הנחות קבועות במעמד החיוב","merchant":"רשתות ובתי עסק מובילים","category":"other","discount":"הנחה אוטומטית בחיוב","description":"ההנחה נכנסת אוטומטית כשמשלמים בכרטיס לאומי, ולכן צריך שבעל הכרטיס יהיה זה שמשלם.","shareability":"presence_required","costsQuota":false,"sourceUrl":"https://www.leumi.co.il/he/bonus","program":{"slug":"leumi-bonus","name":"לאומי בונוס","emoji":"💳","color":"#0f4c8a","colorDark":"#73ade8","soft":"rgba(15, 76, 138, 0.13)","softDark":"rgba(115, 173, 232, 0.16)","joinUrl":"https://www.leumi.co.il/he/bonus"},"holders":[{"id":"u1","name":"מיכאל","you":true}]},{"id":"pais-vacations","title":"חופשות בארץ ובחו״ל","merchant":"מלונות ואתרי נופש","category":"travel","discount":"מחירי מנויים","description":null,"shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/category/263","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-beauty","title":"טיפוח ויופי","merchant":"מכוני טיפוח וספא","category":"health","discount":"מחירי מנויים","description":null,"shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/category/344","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-agmon","title":"כניסה לאגמון החולה","merchant":"אגמון החולה","category":"culture","discount":"מ-10 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-ganguru","title":"כניסה לגן גורו","merchant":"גן גורו","category":"culture","discount":"41 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-galiyam","title":"כניסה לחוף","merchant":"גלי ים, חוף אכזיב","category":"travel","discount":"מ-65 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-haikeif","title":"כניסה לחי כיף","merchant":"חי כיף, ראשון לציון","category":"culture","discount":"20 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-haipark","title":"כניסה לחי פארק","merchant":"חי פארק, קרית מוצקין","category":"culture","discount":"מ-28 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-hamatgader","title":"כניסה לחמי מרפא","merchant":"חמת גדר","category":"travel","discount":"מ-85 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-madatech","title":"כניסה למדעטק","merchant":"מדעטק, חיפה","category":"culture","discount":"36 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-eretzisrael","title":"כניסה למוזיאון","merchant":"מוזיאון ארץ ישראל, תל אביב","category":"culture","discount":"30 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-childrens","title":"כניסה למוזיאון הילדים","merchant":"המוזיאון הישראלי לילדים, חולון","category":"culture","discount":"42 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-bloomfield","title":"כניסה למוזיאון המדע","merchant":"מוזיאון המדע בלומפילד, ירושלים","category":"culture","discount":"42 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-selfie-museum","title":"כניסה למוזיאון הסלפי","merchant":"מוזיאון הסלפי, אילת","category":"travel","discount":"מ-85 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-hadassah","title":"כניסה למוזיאון הרפואה","merchant":"מוזיאון הרפואה הדסה, חדרה","category":"culture","discount":"37 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-funkymonkey","title":"כניסה למתחם משחקים","merchant":"פאנקי מאנקי","category":"culture","discount":"מ-22 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-kfitzuba","title":"כניסה למתחם משחקים","merchant":"קפיצובה","category":"culture","discount":"מ-34 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-paelton","title":"כניסה למתחם משחקים","merchant":"פעלטון","category":"culture","discount":"מ-17 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-ninjacity","title":"כניסה לנינג׳ה סיטי","merchant":"נינג׳ה סיטי","category":"culture","discount":"45 ₪ לשעתיים","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-safari","title":"כניסה לספארי","merchant":"ספארי רמת גן","category":"culture","discount":"60 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-indypark","title":"כניסה לפארק","merchant":"אינדי פארק","category":"travel","discount":"76 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-meianot","title":"כניסה לפארק","merchant":"פארק מי ענות","category":"travel","discount":"מ-31 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-gravity","title":"כניסה לפארק טרמפולינות","merchant":"גרביטי פארק","category":"culture","discount":"מ-35 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-usplash","title":"כניסה לפארק מים","merchant":"U Splash אילת","category":"travel","discount":"65 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-waterland","title":"כניסה לפארק מים","merchant":"Waterland אילת","category":"travel","discount":"95 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-hofgai","title":"כניסה לפארק מים","merchant":"חוף גיא, כנרת","category":"travel","discount":"57 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-yamit2000","title":"כניסה לפארק מים","merchant":"ימית 2000, חולון","category":"travel","discount":"87 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-ijump","title":"כניסה לפארק קפיצות","merchant":"I Jump","category":"culture","discount":"מ-15 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-cinema-ticket","title":"כרטיס לסרט ברשתות הקולנוע","merchant":"סינמה סיטי, פלאנט, הוט סינמה, מובילנד","category":"culture","discount":"9 ₪ בימי חמישי · 20 ₪ בשאר הימים","description":"ההטבה הכי מוכרת של פיס פלוס. המנוי מזמין ומעביר את הכרטיס.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/product/2738","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-theatre","title":"כרטיסים להצגות","merchant":"תיאטראות והיכלי תרבות","category":"culture","discount":"מחיר מנויים","description":"המנוי מזמין דרך החשבון שלו ומעביר את הכרטיס — ההטבה הכי נוחה לשיתוף.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/category/291","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"leumi-bonus-leisure","title":"מבלים ונהנים — מסעדות, מופעים ואטרקציות","merchant":"מסעדות, מופעים ואטרקציות","category":"culture","discount":"מחירים מוזלים למחזיקי הכרטיס","description":"קטגוריית הפנאי של לאומי בונוס: הצגות, אטרקציות למשפחה ומסעדות.","shareability":"transferable","costsQuota":false,"sourceUrl":"https://bonus.leumi.co.il/category/1349","program":{"slug":"leumi-bonus","name":"לאומי בונוס","emoji":"💳","color":"#0f4c8a","colorDark":"#73ade8","soft":"rgba(15, 76, 138, 0.13)","softDark":"rgba(115, 173, 232, 0.16)","joinUrl":"https://www.leumi.co.il/he/bonus"},"holders":[{"id":"u1","name":"מיכאל","you":true}]},{"id":"pais-deals","title":"מבצעים והנחות","merchant":"בתי עסק משתתפים","category":"other","discount":"מבצעים מתחלפים","description":null,"shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/category/271","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-shows","title":"מופעי מוסיקה והופעות","merchant":"אולמות ואמפיתיאטרונים","category":"culture","discount":"מחיר מנויים","description":null,"shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/category/282","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-cinema-vip","title":"סינמה סיטי — זוג כרטיסים למתחם VIP","merchant":"סינמה סיטי","category":"culture","discount":"מחיר מנויים","description":null,"shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/product/96","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-top94","title":"פארק אתגרים","merchant":"טופ 94, אילת","category":"travel","discount":"מ-15 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-live-festival","title":"פסטיבל פיס LIVE","merchant":"מפעל הפיס","category":"culture","discount":"בלעדי למנויי הפיס","description":"פסטיבל שמיועד למנויים בלבד.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://www.pais.co.il/info/paisplus.aspx","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-redsea-sports","title":"פעילות ימית","merchant":"רד סי ספורטס, אילת","category":"travel","discount":"מ-52 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-dominos","title":"פריט חינם בקניית 2 פיצות משפחתיות","merchant":"דומינוס פיצה","category":"food","discount":"פריט חינם","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-aquasport","title":"צלילה","merchant":"אקווה ספורט, אילת","category":"travel","discount":"מ-113 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-rafting-jordan","title":"רפטינג","merchant":"רפטינג נהר הירדן","category":"travel","discount":"מ-46 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-pizzahut","title":"שדרוג פיצה משפחתית ל-XL","merchant":"פיצה האט","category":"food","discount":"שדרוג ללא תשלום","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"pais-kayak-blum","title":"שייט קיאקים","merchant":"קיאקי כפר בלום","category":"travel","discount":"62 ₪","description":"מחיר שפורסם במבצע הקיץ של פיס פלוס — כדאי לאמת מחיר עדכני לפני שמבקשים.","shareability":"transferable","costsQuota":true,"sourceUrl":"https://paisplus.co.il/","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"leumi-bonus-food-vouchers","title":"תווי בונוס לרשתות מזון ופארם","merchant":"רשתות מזון ופארם","category":"food","discount":"עד 20% חזרה מהבנק","description":"רוכשים תו בסכום שבוחרים, והבנק מחזיר חלק מהסכום לחשבון. את התו עצמו אפשר להעביר.","shareability":"transferable","costsQuota":false,"sourceUrl":"https://bonus.leumi.co.il/category/1329","program":{"slug":"leumi-bonus","name":"לאומי בונוס","emoji":"💳","color":"#0f4c8a","colorDark":"#73ade8","soft":"rgba(15, 76, 138, 0.13)","softDark":"rgba(115, 173, 232, 0.16)","joinUrl":"https://www.leumi.co.il/he/bonus"},"holders":[{"id":"u1","name":"מיכאל","you":true}]},{"id":"leumi-bonus-shopping-vouchers","title":"תווי קנייה למותגים ורשתות","merchant":"מותגי אופנה, חשמל ובית","category":"fashion","discount":"תווי קנייה בהנחה","description":"תו קנייה שנרכש דרך המועדון ניתן להעברה למי שישתמש בו.","shareability":"transferable","costsQuota":false,"sourceUrl":"https://bonus.leumi.co.il/","program":{"slug":"leumi-bonus","name":"לאומי בונוס","emoji":"💳","color":"#0f4c8a","colorDark":"#73ade8","soft":"rgba(15, 76, 138, 0.13)","softDark":"rgba(115, 173, 232, 0.16)","joinUrl":"https://www.leumi.co.il/he/bonus"},"holders":[{"id":"u1","name":"מיכאל","you":true}]},{"id":"hot-insurance","title":"הטבות בביטוח ובפיננסים","merchant":"חברות ביטוח ופיננסים","category":"finance","discount":"תנאי מועדון","description":null,"shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.hot.co.il/","program":{"slug":"hot-club","name":"מועדון צרכנות HOT","emoji":"🛒","color":"#e4002b","colorDark":"#e87389","soft":"rgba(228, 0, 43, 0.13)","softDark":"rgba(232, 115, 137, 0.16)","joinUrl":"https://www.hot.co.il/"},"holders":[{"id":"u3","name":"יוסי","you":false}]},{"id":"leumi-bonus-new-account","title":"הטבות פתיחת חשבון","merchant":"בנק לאומי","category":"finance","discount":"מסלול הטבות למצטרפים","description":"רלוונטי למי שפותח חשבון בעצמו — לא ניתן להעברה.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.leumi.co.il/minisite/open-account/","program":{"slug":"leumi-bonus","name":"לאומי בונוס","emoji":"💳","color":"#0f4c8a","colorDark":"#73ade8","soft":"rgba(15, 76, 138, 0.13)","softDark":"rgba(115, 173, 232, 0.16)","joinUrl":"https://www.leumi.co.il/he/bonus"},"holders":[{"id":"u1","name":"מיכאל","you":true}]},{"id":"pais-vip","title":"הטבות VIP לזהב פלוס ופלטינום","merchant":"מפעל הפיס","category":"other","discount":"הטבות בלעדיות לפי דרגה","description":"תלוי בדרגת המנוי עצמו: בעל שני כרטיסים מקבל מעמד זהב פלוס ושתי הטבות VIP.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.pais.co.il/info/default.aspx?PageId=1178","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"hot-loan","title":"הלוואה לכל מטרה בתנאי מועדון","merchant":"בנק לאומי","category":"finance","discount":"עד 160,000 ₪","description":"הלוואה בתנאים מיוחדים לחברי מועדון הוט. אישית לחלוטין.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.leumi.co.il/minisite/hot_consumer_card/","program":{"slug":"hot-club","name":"מועדון צרכנות HOT","emoji":"🛒","color":"#e4002b","colorDark":"#e87389","soft":"rgba(228, 0, 43, 0.13)","softDark":"rgba(232, 115, 137, 0.16)","joinUrl":"https://www.hot.co.il/"},"holders":[{"id":"u3","name":"יוסי","you":false}]},{"id":"pais-monthly-quota","title":"מכסת זכאויות חודשית","merchant":"מפעל הפיס","category":"other","discount":"12 זכאויות בכסף · 18 בפלטינום","description":"כסף: 3 מזון, 6 סרטים ומופעים, 3 אחר. פלטינום: 6/6/6. לא ניתן לצבור — המכסה מתאפסת כל חודש.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.pais.co.il/info/default.aspx?PageId=1178","program":{"slug":"pais-plus","name":"מנוי הפיס · פיס פלוס","emoji":"🎟️","color":"#0aa06e","colorDark":"#73e8c1","soft":"rgba(10, 160, 110, 0.13)","softDark":"rgba(115, 232, 193, 0.16)","joinUrl":"https://www.pais.co.il/info/paisplus.aspx"},"holders":[{"id":"u2","name":"דנה","you":false},{"id":"u4","name":"נועה","you":false}]},{"id":"miluim-active-status","title":"מעמד משרת מילואים פעיל","merchant":"צה״ל","category":"other","discount":"פותח זכאות להטבות נוספות","description":"המעמד עצמו הוא תנאי סף להטבות רבות. אישי לחלוטין.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.miluim.idf.il/","program":{"slug":"miluim","name":"משרתי מילואים","emoji":"🎖️","color":"#4a5d3a","colorDark":"#acc09a","soft":"rgba(74, 93, 58, 0.13)","softDark":"rgba(172, 192, 154, 0.16)","joinUrl":"https://www.matzdiim.co.il/"},"holders":[{"id":"u1","name":"מיכאל","you":true},{"id":"u5","name":"אורי","you":false}]},{"id":"miluim-family-grant","title":"מענק משפחה מוגדל","merchant":"משרד הביטחון","category":"finance","discount":"מענק למשרתים עם ילדים","description":"למשרתים שביצעו לפחות 40 ימי שירות בשנה ויש להם ילד עד גיל 14. משולם ישירות למשרת.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.matzdiim.co.il/","program":{"slug":"miluim","name":"משרתי מילואים","emoji":"🎖️","color":"#4a5d3a","colorDark":"#acc09a","soft":"rgba(74, 93, 58, 0.13)","softDark":"rgba(172, 192, 154, 0.16)","joinUrl":"https://www.matzdiim.co.il/"},"holders":[{"id":"u1","name":"מיכאל","you":true},{"id":"u5","name":"אורי","you":false}]},{"id":"miluim-employment-grant","title":"מענקי תעסוקה וחזרה ללימודים","merchant":"משרד האוצר","category":"finance","discount":"מענקים משלימים","description":"סיוע לחיילים החוזרים ללימודים ולשוק העבודה.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.matzdiim.co.il/","program":{"slug":"miluim","name":"משרתי מילואים","emoji":"🎖️","color":"#4a5d3a","colorDark":"#acc09a","soft":"rgba(74, 93, 58, 0.13)","softDark":"rgba(172, 192, 154, 0.16)","joinUrl":"https://www.matzdiim.co.il/"},"holders":[{"id":"u1","name":"מיכאל","you":true},{"id":"u5","name":"אורי","you":false}]},{"id":"miluim-tax-credit","title":"נקודות זיכוי במס הכנסה","merchant":"רשות המסים","category":"finance","discount":"זיכוי במס לפי ימי השירות","description":"מחושב לפי השירות של החייל עצמו. זכות אישית שלא ניתן להעביר לאף אחד.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.kolzchut.org.il/he/%D7%A0%D7%A7%D7%95%D7%93%D7%95%D7%AA_%D7%96%D7%99%D7%9B%D7%95%D7%99_%D7%9E%D7%9E%D7%A1_%D7%94%D7%9B%D7%A0%D7%A1%D7%94_%D7%9C%D7%9C%D7%95%D7%97%D7%9E%D7%99_%D7%9E%D7%99%D7%9C%D7%95%D7%90%D7%99%D7%9D","program":{"slug":"miluim","name":"משרתי מילואים","emoji":"🎖️","color":"#4a5d3a","colorDark":"#acc09a","soft":"rgba(74, 93, 58, 0.13)","softDark":"rgba(172, 192, 154, 0.16)","joinUrl":"https://www.matzdiim.co.il/"},"holders":[{"id":"u1","name":"מיכאל","you":true},{"id":"u5","name":"אורי","you":false}]},{"id":"miluim-family-support","title":"סיוע למשפחות, הורים וסטודנטים","merchant":"משרד הביטחון","category":"finance","discount":"סל סיוע ייעודי","description":null,"shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.matzdiim.co.il/","program":{"slug":"miluim","name":"משרתי מילואים","emoji":"🎖️","color":"#4a5d3a","colorDark":"#acc09a","soft":"rgba(74, 93, 58, 0.13)","softDark":"rgba(172, 192, 154, 0.16)","joinUrl":"https://www.matzdiim.co.il/"},"holders":[{"id":"u1","name":"מיכאל","you":true},{"id":"u5","name":"אורי","you":false}]},{"id":"miluim-self-employed","title":"סיוע לעצמאים ובעלי עסקים","merchant":"משרד האוצר","category":"finance","discount":"סיוע כלכלי לעסק","description":"סיוע לעצמאים שנפגעו כלכלית עקב השירות.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.matzdiim.co.il/","program":{"slug":"miluim","name":"משרתי מילואים","emoji":"🎖️","color":"#4a5d3a","colorDark":"#acc09a","soft":"rgba(74, 93, 58, 0.13)","softDark":"rgba(172, 192, 154, 0.16)","joinUrl":"https://www.matzdiim.co.il/"},"holders":[{"id":"u1","name":"מיכאל","you":true},{"id":"u5","name":"אורי","you":false}]},{"id":"leumi-bonus-fx-fee","title":"עמלת עסקאות מט״ח מוזלת","merchant":"בנק לאומי","category":"finance","discount":"1.5% בלבד","description":"תנאי של הכרטיס עצמו — חל רק על העסקאות של בעל הכרטיס.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.leumi.co.il/he/credit-cards","program":{"slug":"leumi-bonus","name":"לאומי בונוס","emoji":"💳","color":"#0f4c8a","colorDark":"#73ade8","soft":"rgba(15, 76, 138, 0.13)","softDark":"rgba(115, 173, 232, 0.16)","joinUrl":"https://www.leumi.co.il/he/bonus"},"holders":[{"id":"u1","name":"מיכאל","you":true}]},{"id":"hot-card-fee-waiver","title":"פטור מדמי כרטיס אשראי","merchant":"מועדון הוט","category":"finance","discount":"ללא דמי כרטיס","description":"תנאי של הכרטיס האישי — לא רלוונטי לאף אחד אחר.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://www.leumi.co.il/minisite/hot_consumer_card/","program":{"slug":"hot-club","name":"מועדון צרכנות HOT","emoji":"🛒","color":"#e4002b","colorDark":"#e87389","soft":"rgba(228, 0, 43, 0.13)","softDark":"rgba(232, 115, 137, 0.16)","joinUrl":"https://www.hot.co.il/"},"holders":[{"id":"u3","name":"יוסי","you":false}]},{"id":"amex-rewards-travel","title":"אתר ההטבות — נופש וחו״ל","merchant":"מלונות, טיסות וחבילות נופש","category":"travel","discount":"מחירי מועדון","description":null,"shareability":"transferable","costsQuota":false,"sourceUrl":"https://rewards.americanexpress.co.il/","program":{"slug":"amex-il","name":"American Express ישראל","emoji":"💠","color":"#006fcf","colorDark":"#73b2e8","soft":"rgba(0, 111, 207, 0.13)","softDark":"rgba(115, 178, 232, 0.16)","joinUrl":"https://he.americanexpress.co.il/"},"holders":[]},{"id":"amex-rewards-culture","title":"אתר ההטבות — תרבות ופנאי","merchant":"מופעים, הצגות ואטרקציות","category":"culture","discount":"מחירי מועדון","description":"הזמנה דרך אתר ההטבות; את הכרטיס אפשר להעביר.","shareability":"transferable","costsQuota":false,"sourceUrl":"https://rewards.americanexpress.co.il/","program":{"slug":"amex-il","name":"American Express ישראל","emoji":"💠","color":"#006fcf","colorDark":"#73b2e8","soft":"rgba(0, 111, 207, 0.13)","softDark":"rgba(115, 178, 232, 0.16)","joinUrl":"https://he.americanexpress.co.il/"},"holders":[]},{"id":"amex-hot-card-network","title":"הנחות בכ-13,000 בתי עסק (כרטיס הוט)","merchant":"מזון, דלק, תיירות, חשמל ואופנה","category":"other","discount":"הנחה אוטומטית","description":null,"shareability":"presence_required","costsQuota":false,"sourceUrl":"https://marketing.americanexpress.co.il/cards-clubs/hot/","program":{"slug":"amex-il","name":"American Express ישראל","emoji":"💠","color":"#006fcf","colorDark":"#73b2e8","soft":"rgba(0, 111, 207, 0.13)","softDark":"rgba(115, 178, 232, 0.16)","joinUrl":"https://he.americanexpress.co.il/"},"holders":[]},{"id":"amex-lifestyle-chains","title":"הנחות ברשתות המועדון","merchant":"סופר-פארם, מקדונלד׳ס, סטימצקי, איסתא","category":"food","discount":"הנחות קבועות","description":"רשתות קבועות של מועדון LifeStyle.","shareability":"presence_required","costsQuota":false,"sourceUrl":"https://he.americanexpress.co.il/style/","program":{"slug":"amex-il","name":"American Express ישראל","emoji":"💠","color":"#006fcf","colorDark":"#73b2e8","soft":"rgba(0, 111, 207, 0.13)","softDark":"rgba(115, 178, 232, 0.16)","joinUrl":"https://he.americanexpress.co.il/"},"holders":[]},{"id":"amex-hot-card-fx","title":"כרטיס מועדון הוט — עמלת מט״ח מוזלת","merchant":"American Express","category":"finance","discount":"1% על רכישות בחו״ל","description":"תנאי של הכרטיס האישי, כולל רכישות באתרים בינלאומיים.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://marketing.americanexpress.co.il/cards-clubs/hot/","program":{"slug":"amex-il","name":"American Express ישראל","emoji":"💠","color":"#006fcf","colorDark":"#73b2e8","soft":"rgba(0, 111, 207, 0.13)","softDark":"rgba(115, 178, 232, 0.16)","joinUrl":"https://he.americanexpress.co.il/"},"holders":[]},{"id":"amex-hever","title":"כרטיס מועדון חבר","merchant":"אלפי רשתות ובתי עסק","category":"other","discount":"הנחות בכל קנייה","description":"מיועד לחברי מועדון חבר — משרתי קבע וגמלאי צה״ל.","shareability":"presence_required","costsQuota":false,"sourceUrl":"https://www.americanexpress.co.il/credit-cards/hevercard","program":{"slug":"amex-il","name":"American Express ישראל","emoji":"💠","color":"#006fcf","colorDark":"#73b2e8","soft":"rgba(0, 111, 207, 0.13)","softDark":"rgba(115, 178, 232, 0.16)","joinUrl":"https://he.americanexpress.co.il/"},"holders":[]},{"id":"amex-lifestyle","title":"מועדון LifeStyle — הנחות אוטומטיות","merchant":"למעלה מ-3,000 בתי עסק","category":"other","discount":"הנחה במעמד החיוב","description":"ההנחה נכנסת אוטומטית בחיוב החשבון, ולכן דורשת את הכרטיס של החבר.","shareability":"presence_required","costsQuota":false,"sourceUrl":"https://he.americanexpress.co.il/style/","program":{"slug":"amex-il","name":"American Express ישראל","emoji":"💠","color":"#006fcf","colorDark":"#73b2e8","soft":"rgba(0, 111, 207, 0.13)","softDark":"rgba(115, 178, 232, 0.16)","joinUrl":"https://he.americanexpress.co.il/"},"holders":[]},{"id":"amex-membership-rewards","title":"Membership Rewards — צבירת נקודות","merchant":"American Express","category":"finance","discount":"נקודות על כל עסקה","description":"הנקודות נצברות לחשבון של בעל הכרטיס בלבד.","shareability":"personal_only","costsQuota":false,"sourceUrl":"https://he.americanexpress.co.il/membership-rewards1/","program":{"slug":"amex-il","name":"American Express ישראל","emoji":"💠","color":"#006fcf","colorDark":"#73b2e8","soft":"rgba(0, 111, 207, 0.13)","softDark":"rgba(115, 178, 232, 0.16)","joinUrl":"https://he.americanexpress.co.il/"},"holders":[]}]};
+
+  var CATEGORY_HE = {
+    culture: "תרבות ובידור", food: "מזון ומסעדות", travel: "טיסות ונופש",
+    fashion: "אופנה", electronics: "חשמל וטכנולוגיה", finance: "פיננסים וביטוח",
+    health: "בריאות וטיפוח", other: "אחר"
+  };
+  var SHARE_HE = {
+    transferable: "ניתן להעברה",
+    presence_required: "דורש נוכחות",
+    personal_only: "אישי בלבד"
+  };
+
+  /* Mirrors initials() in lib/format.ts. */
+  function initials(name) {
+    var parts = String(name).trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return "?";
+    if (parts.length === 1) return parts[0].slice(0, 1);
+    return parts[0][0] + parts[1][0];
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  /* Mirrors askLabel() in lib/whatsapp.ts. */
+  function askLabel(share, who) {
+    return share === "transferable" ? "בקשו מ" + who : "תאמו עם " + who;
+  }
+
+  /* Mirrors buildAskMessage() in lib/whatsapp.ts. */
+  function buildMessage(offer, asker) {
+    var lines = [];
+    lines.push("היי! " + asker + " כאן 👋");
+    lines.push("");
+    lines.push('ראיתי ב"הטבות ביחד" שיש לך ' + offer.program.name + ", ויש דרכו הטבה:");
+    lines.push(offer.title + " — " + offer.merchant);
+    lines.push("ההטבה: " + offer.discount);
+    lines.push("");
+    lines.push(offer.shareability === "transferable"
+      ? "אפשר שתזמין דרך החשבון שלך ואעביר לך את הכסף?"
+      : "אפשר שנתאם לקנות ביחד, או שתקנה ואחזיר לך?");
+    if (offer.costsQuota) {
+      lines.push("(יודע שזה מנצל לך זכאות חודשית — רק אם זה מסתדר לך)");
+    }
+    return lines.join("\n");
+  }
+
+  // ---------------------------------------------------------------- state
+  var state = { q: "", programs: {}, categories: {}, onlyOurs: false };
+  var me = DATA.members.filter(function (m) { return m.you; })[0] || DATA.members[0];
+
+  // ---------------------------------------------------------------- header
+  document.getElementById("gname").textContent = DATA.groupName;
+  document.getElementById("gsub").textContent = DATA.members.length + " חברים בקבוצה";
+
+  var roster = document.getElementById("roster");
+  DATA.members.forEach(function (m) {
+    var chip = el("span", "who" + (m.you ? " me" : ""));
+    chip.appendChild(el("span", "av", initials(m.name)));
+    chip.appendChild(document.createTextNode(m.name + (m.you ? " (אתם)" : "")));
+    roster.appendChild(chip);
+  });
+
+  // --------------------------------------------------------------- filters
+  var chipsBox = document.getElementById("chips");
+
+  function addChip(label, isOn, onToggle) {
+    var b = el("button", "chip", label);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(isOn()));
+    b.addEventListener("click", function () {
+      onToggle();
+      b.setAttribute("aria-pressed", String(isOn()));
+      render();
+    });
+    chipsBox.appendChild(b);
+  }
+
+  addChip("✅ רק מה שיש לנו",
+    function () { return state.onlyOurs; },
+    function () { state.onlyOurs = !state.onlyOurs; });
+
+  var seenPrograms = [];
+  DATA.offers.forEach(function (o) {
+    if (seenPrograms.indexOf(o.program.slug) === -1) seenPrograms.push(o.program.slug);
+  });
+  seenPrograms.forEach(function (slug) {
+    var p = DATA.offers.filter(function (o) { return o.program.slug === slug; })[0].program;
+    addChip(p.emoji + " " + p.name,
+      function () { return !!state.programs[slug]; },
+      function () { state.programs[slug] = !state.programs[slug]; });
+  });
+
+  var seenCats = [];
+  DATA.offers.forEach(function (o) {
+    if (seenCats.indexOf(o.category) === -1) seenCats.push(o.category);
+  });
+  seenCats.forEach(function (c) {
+    addChip(CATEGORY_HE[c] || c,
+      function () { return !!state.categories[c]; },
+      function () { state.categories[c] = !state.categories[c]; });
+  });
+
+  document.getElementById("q").addEventListener("input", function (e) {
+    state.q = e.target.value;
+    render();
+  });
+
+  function anyOn(map) {
+    for (var k in map) if (map[k]) return true;
+    return false;
+  }
+
+  /* Substring match over title + merchant, the same shape as the pg_trgm
+     index the real app queries. */
+  function matches(offer, query) {
+    if (!query) return true;
+    var hay = (offer.title + " " + offer.merchant).toLowerCase();
+    return query.toLowerCase().split(/\s+/).filter(Boolean).every(function (t) {
+      return hay.indexOf(t) !== -1;
+    });
+  }
+
+  // ----------------------------------------------------------------- sheet
+  var veil = document.getElementById("veil");
+  var lastFocus = null;
+
+  function openSheet(offer, holder) {
+    lastFocus = document.activeElement;
+    document.getElementById("sheet-title").textContent = askLabel(offer.shareability, holder.name);
+    document.getElementById("sheet-lede").textContent =
+      "באפליקציה האמיתית הכפתור פותח ווטסאפ ל" + holder.name + " עם ההודעה הזו מוכנה לשליחה.";
+    document.getElementById("sheet-msg").textContent = buildMessage(offer, me.name);
+    veil.hidden = false;
+    document.body.style.overflow = "hidden";
+    document.getElementById("sheet-close").focus();
+  }
+
+  function closeSheet() {
+    veil.hidden = true;
+    document.body.style.overflow = "";
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.getElementById("sheet-close").addEventListener("click", closeSheet);
+  veil.addEventListener("click", function (e) { if (e.target === veil) closeSheet(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !veil.hidden) closeSheet();
+  });
+
+  // ------------------------------------------------------------------ card
+  function card(offer) {
+    var li = el("li");
+    var art = el("article", "offer" + (offer.holders.length ? "" : " gap"));
+    art.style.setProperty("--pc", offer.program.color);
+    art.style.setProperty("--pc-d", offer.program.colorDark);
+    art.style.setProperty("--pc-soft", offer.program.soft);
+    art.style.setProperty("--pc-soft-d", offer.program.softDark);
+
+    var top = el("div", "otop");
+    top.appendChild(el("span", "badge", offer.program.emoji));
+    var meta = el("div");
+    meta.appendChild(el("p", "pname", offer.program.name));
+    meta.appendChild(el("h3", "otitle", offer.title));
+    meta.appendChild(el("p", "omerchant", offer.merchant));
+    top.appendChild(meta);
+    art.appendChild(top);
+
+    var d = el("p", "odiscount");
+    d.appendChild(el("bdi", null, offer.discount));
+    art.appendChild(d);
+
+    if (offer.description) art.appendChild(el("p", "odesc", offer.description));
+
+    var pills = el("div", "pills");
+    pills.appendChild(el("span", "pill share-" + offer.shareability, SHARE_HE[offer.shareability]));
+    pills.appendChild(el("span", "pill cat", CATEGORY_HE[offer.category] || offer.category));
+    art.appendChild(pills);
+
+    var row = el("div", "who-row");
+    if (!offer.holders.length) {
+      var gapWrap = el("div");
+      gapWrap.appendChild(el("p", "who-text", "אף אחד בקבוצה לא חבר ב" + offer.program.name + "."));
+      if (offer.program.joinUrl) {
+        var a = el("a", "joinlink", "כדאי שמישהו יצטרף →");
+        a.href = offer.program.joinUrl;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        gapWrap.appendChild(a);
+      }
+      row.appendChild(gapWrap);
+      art.appendChild(row);
+    } else {
+      var stack = el("div", "stack");
+      offer.holders.slice(0, 4).forEach(function (h) {
+        var av = el("span", "av", initials(h.name));
+        av.title = h.name;
+        stack.appendChild(av);
+      });
+      row.appendChild(stack);
+
+      var youHold = offer.holders.some(function (h) { return h.you; });
+      var others = offer.holders.filter(function (h) { return !h.you; });
+      row.appendChild(el("p", "who-text",
+        youHold && !others.length
+          ? "יש לכם את זה"
+          : "יש ל" + offer.holders.map(function (h) { return h.name; }).join(", ")));
+      art.appendChild(row);
+
+      if (offer.shareability === "personal_only") {
+        art.appendChild(el("p", "note", "הטבה אישית — לא ניתן להעביר אותה למישהו אחר."));
+      } else if (!others.length) {
+        art.appendChild(el("p", "note", "ההטבה כבר שלכם — אין את מי לבקש."));
+      } else {
+        var acts = el("div", "actions");
+        others.forEach(function (h) {
+          var b = el("button", "ask");
+          b.type = "button";
+          b.appendChild(el("span", null, "💬"));
+          b.appendChild(document.createTextNode(askLabel(offer.shareability, h.name)));
+          b.addEventListener("click", function () { openSheet(offer, h); });
+          acts.appendChild(b);
+        });
+        art.appendChild(acts);
+        if (offer.costsQuota) {
+          art.appendChild(el("p", "note quota",
+            "⚠️ שימוש בהטבה מנצל אחת מהזכאויות החודשיות של מי שתבקשו."));
+        }
+      }
+    }
+
+    if (offer.sourceUrl) {
+      var s = el("a", "srclink", "פרטי ההטבה באתר המועדון");
+      s.href = offer.sourceUrl;
+      s.target = "_blank";
+      s.rel = "noopener noreferrer";
+      art.appendChild(s);
+    }
+
+    li.appendChild(art);
+    return li;
+  }
+
+  // ---------------------------------------------------------------- render
+  var feed = document.getElementById("feed");
+  var tally = document.getElementById("tally");
+
+  function render() {
+    var q = state.q.trim();
+    var progOn = anyOn(state.programs);
+    var catOn = anyOn(state.categories);
+
+    var visible = DATA.offers.filter(function (o) {
+      if (state.onlyOurs && !o.holders.length) return false;
+      if (progOn && !state.programs[o.program.slug]) return false;
+      if (catOn && !state.categories[o.category]) return false;
+      return matches(o, q);
+    });
+
+    var gaps = DATA.offers.filter(function (o) { return !o.holders.length; }).length;
+    tally.textContent = visible.length + " הטבות" +
+      (gaps && !state.onlyOurs ? " · " + gaps + " מהן אף אחד בקבוצה לא זכאי" : "");
+
+    feed.textContent = "";
+    if (!visible.length) {
+      var box = el("div", "empty");
+      box.appendChild(el("div", null, "🔍"));
+      box.appendChild(el("strong", null, "אין הטבות שמתאימות לסינון"));
+      box.appendChild(el("p", null, "נסו לנקות חלק מהמסננים."));
+      feed.appendChild(box);
+      return;
+    }
+    var frag = document.createDocumentFragment();
+    visible.forEach(function (o) { frag.appendChild(card(o)); });
+    feed.appendChild(frag);
+  }
+
+  render();
+})();
+</script>

@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "seed": "tsx supabase/seed/run.ts",
-    "test:db": "./scripts/db-test.sh"
+    "test:db": "./scripts/db-test.sh",
+    "demo": "tsx demo/build-demo.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.5",

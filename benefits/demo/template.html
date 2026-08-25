@@ -1,0 +1,678 @@
+<title>הטבות ביחד</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&display=swap">
+
+<style>
+  /* Light palette. Neutrals carry a slight blue bias toward the brand, matching
+     the tokens in tailwind.config.ts rather than defaulting to a flat grey. */
+  :root {
+    direction: rtl;
+
+    --ground:      #f4f6fa;
+    --card:        #ffffff;
+    --card-sunk:   #f4f6fa;
+    --ink:         #12151c;
+    --muted:       #5b6472;
+    --faint:       #8b94a3;
+    --line:        #e3e7ee;
+
+    --brand:       #2b56d4;
+    --brand-str:   #2244ab;
+    --brand-soft:  #eef4ff;
+    --brand-line:  #c9daff;
+
+    --wa:          #25d366;
+    --wa-ink:      #06300f;
+
+    --ok-bg:       #ecfdf5;  --ok-fg:    #047857;
+    --warn-bg:     #fffbeb;  --warn-fg:  #b45309;
+    --mute-bg:     #f1f5f9;  --mute-fg:  #475569;
+    --alert-bg:    #fef2f2;  --alert-fg: #b91c1c;
+
+    --shadow:      0 1px 2px rgba(18,21,28,.06), 0 4px 16px rgba(18,21,28,.06);
+    --sheet-veil:  rgba(18,21,28,.45);
+
+    --radius:      16px;
+    --maxw:        600px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:     #0e1116;
+      --card:       #161a22;
+      --card-sunk:  #1c212b;
+      --ink:        #e9edf5;
+      --muted:      #a3adbe;
+      --faint:      #7c8698;
+      --line:       #262d3a;
+
+      --brand:      #7ba0ff;
+      --brand-str:  #a8c1ff;
+      --brand-soft: #17243f;
+      --brand-line: #2c3f6b;
+
+      --wa:         #25d366;
+      --wa-ink:     #06240f;
+
+      --ok-bg:      #0d2a20;  --ok-fg:    #5ee9a4;
+      --warn-bg:    #2c2210;  --warn-fg:  #fbbf24;
+      --mute-bg:    #1c222c;  --mute-fg:  #9aa4b4;
+      --alert-bg:   #2b1416;  --alert-fg: #fca5a5;
+
+      --shadow:     0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+      --sheet-veil: rgba(0,0,0,.6);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:     #0e1116;
+    --card:       #161a22;
+    --card-sunk:  #1c212b;
+    --ink:        #e9edf5;
+    --muted:      #a3adbe;
+    --faint:      #7c8698;
+    --line:       #262d3a;
+
+    --brand:      #7ba0ff;
+    --brand-str:  #a8c1ff;
+    --brand-soft: #17243f;
+    --brand-line: #2c3f6b;
+
+    --wa:         #25d366;
+    --wa-ink:     #06240f;
+
+    --ok-bg:      #0d2a20;  --ok-fg:    #5ee9a4;
+    --warn-bg:    #2c2210;  --warn-fg:  #fbbf24;
+    --mute-bg:    #1c222c;  --mute-fg:  #9aa4b4;
+    --alert-bg:   #2b1416;  --alert-fg: #fca5a5;
+
+    --shadow:     0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+    --sheet-veil: rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Assistant", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  bdi { unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 16px 96px;
+  }
+
+  /* ---------------------------------------------------------------- banner */
+  .banner {
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-line);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin: 16px 0 20px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .banner b { color: var(--brand-str); }
+
+  /* ---------------------------------------------------------------- header */
+  .head { display: flex; align-items: flex-start; gap: 12px; }
+  .head h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .head p { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+
+  .roster { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .who {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 10px 4px 6px;
+    font-size: 13px; color: var(--muted);
+  }
+  .who .av { width: 22px; height: 22px; font-size: 10px; }
+  .who.me { border-color: var(--brand-line); background: var(--brand-soft); color: var(--brand-str); }
+
+  .av {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 999px;
+    background: var(--brand-soft); color: var(--brand-str);
+    border: 1px solid var(--brand-line);
+    font-size: 11px; font-weight: 700; line-height: 1;
+    flex: none;
+  }
+
+  /* --------------------------------------------------------------- filters */
+  .filters {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--ground);
+    padding: 16px 0 10px;
+    margin-top: 20px;
+  }
+
+  .search {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 12px;
+    padding: 11px 14px;
+    font: inherit;
+    font-size: 16px;
+  }
+  .search::placeholder { color: var(--faint); }
+
+  .chips {
+    display: flex; gap: 8px; margin-top: 10px;
+    overflow-x: auto; padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+
+  .chip {
+    flex: none;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 7px 13px;
+    font: inherit; font-size: 13.5px; font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--brand-soft);
+    border-color: var(--brand);
+    color: var(--brand-str);
+  }
+
+  .tally { font-size: 13.5px; color: var(--muted); padding: 2px 2px 0; }
+
+  /* ----------------------------------------------------------------- cards */
+  .feed { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; list-style: none; padding: 0; }
+
+  .offer {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 15px;
+  }
+  .offer.gap { opacity: .72; }
+
+  .otop { display: flex; gap: 11px; align-items: flex-start; }
+
+  .badge {
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--pc-soft); font-size: 19px; flex: none;
+  }
+
+  .pname { font-size: 12px; font-weight: 700; color: var(--pc); margin: 0; }
+
+  /* Program colours are brand colours chosen for a light ground (Leumi navy,
+     for one), so each card carries a lightened twin as --pc-d and the theme
+     blocks pick between them. Both are always defined inline on the card, so
+     there is no state where the colour is missing. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .pname { color: var(--pc-d); }
+    :root:not([data-theme="light"]) .badge { background: var(--pc-soft-d); }
+  }
+  :root[data-theme="dark"] .pname { color: var(--pc-d); }
+  :root[data-theme="dark"] .badge { background: var(--pc-soft-d); }
+  .otitle { margin: 2px 0 0; font-size: 16.5px; font-weight: 700; line-height: 1.3; text-wrap: balance; }
+  .omerchant { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+
+  .odiscount { margin: 12px 0 0; font-size: 19px; font-weight: 700; color: var(--brand-str); }
+  .odesc { margin: 6px 0 0; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+  .pill {
+    border-radius: 999px; padding: 4px 10px;
+    font-size: 12px; font-weight: 600;
+    background: var(--mute-bg); color: var(--mute-fg);
+  }
+  .pill.share-transferable      { background: var(--ok-bg);   color: var(--ok-fg); }
+  .pill.share-presence_required { background: var(--warn-bg); color: var(--warn-fg); }
+  .pill.share-personal_only     { background: var(--mute-bg); color: var(--mute-fg); }
+  .pill.cat { background: var(--card-sunk); color: var(--muted); font-weight: 500; }
+
+  .who-row {
+    display: flex; align-items: center; gap: 9px;
+    border-top: 1px solid var(--line);
+    margin-top: 14px; padding-top: 12px;
+  }
+  .stack { display: flex; flex: none; }
+  .stack .av { width: 26px; height: 26px; font-size: 10px; margin-inline-start: -7px; }
+  .stack .av:first-child { margin-inline-start: 0; }
+  .who-text { font-size: 13.5px; color: var(--muted); margin: 0; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+  .ask {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--wa); color: var(--wa-ink);
+    border: 0; border-radius: 12px;
+    padding: 10px 15px;
+    font: inherit; font-size: 14px; font-weight: 700;
+    cursor: pointer;
+  }
+  .ask:hover { filter: brightness(1.05); }
+
+  .note { margin: 9px 0 0; font-size: 12.5px; color: var(--faint); line-height: 1.5; }
+  .note.quota { color: var(--warn-fg); }
+
+  .joinlink {
+    display: inline-block; margin-top: 4px;
+    font-size: 13.5px; font-weight: 700; color: var(--brand);
+  }
+
+  .srclink { display: inline-block; margin-top: 11px; font-size: 12px; color: var(--faint); }
+
+  .empty {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 40px 20px; text-align: center;
+    margin-top: 12px;
+  }
+  .empty p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+  .empty strong { display: block; font-size: 16px; color: var(--ink); }
+
+  /* ----------------------------------------------------------------- sheet */
+  .veil {
+    position: fixed; inset: 0; z-index: 60;
+    background: var(--sheet-veil);
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .veil[hidden] { display: none; }
+
+  .sheet {
+    background: var(--card);
+    width: 100%; max-width: var(--maxw);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+    max-height: 86vh; overflow-y: auto;
+    animation: rise .22s ease-out;
+  }
+  @keyframes rise { from { transform: translateY(18px); opacity: .6 } to { transform: none; opacity: 1 } }
+  @media (prefers-reduced-motion: reduce) { .sheet { animation: none } }
+
+  .sheet h2 { margin: 0; font-size: 18px; font-weight: 700; }
+  .sheet .lede { margin: 5px 0 14px; font-size: 13.5px; color: var(--muted); }
+
+  .bubble {
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-line);
+    border-radius: 14px;
+    padding: 13px 15px;
+    font-size: 14.5px; line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .sheet-foot { display: flex; gap: 8px; margin-top: 15px; }
+  .btn {
+    flex: 1;
+    border-radius: 12px; padding: 11px 14px;
+    font: inherit; font-size: 14.5px; font-weight: 700;
+    cursor: pointer; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink);
+  }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  :root[data-theme="dark"] .btn.primary { color: #0e1116; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .btn.primary { color: #0e1116; }
+  }
+
+  .foot {
+    margin-top: 28px; padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--faint); line-height: 1.6;
+  }
+</style>
+
+<div class="wrap" lang="he">
+  <div class="banner">
+    <b>הדגמה.</b> החברים כאן בדויים, אין התחברות ושום דבר לא נשמר.
+    ההטבות עצמן אמיתיות ונאספו מדפים פומביים של המועדונים.
+  </div>
+
+  <header class="head">
+    <div>
+      <h1 id="gname"></h1>
+      <p id="gsub"></p>
+    </div>
+  </header>
+  <div class="roster" id="roster"></div>
+
+  <div class="filters">
+    <input id="q" class="search" type="search" placeholder="חיפוש הטבה או בית עסק…" aria-label="חיפוש הטבות">
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <p class="tally" id="tally"></p>
+  <ul class="feed" id="feed"></ul>
+
+  <p class="foot">
+    זו הדגמה של אפליקציה אמיתית. חלק מהמחירים פורסמו במבצע עונתי ומסומנים ככאלה —
+    כדאי לאמת מול המועדון לפני שמבקשים. מועדונים מסוימים מגבילים הטבות לחבר עצמו,
+    ולכן ההטבות מסומנות לפי מה שניתן להעביר.
+  </p>
+</div>
+
+<div class="veil" id="veil" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <h2 id="sheet-title"></h2>
+    <p class="lede" id="sheet-lede"></p>
+    <div class="bubble" id="sheet-msg"></div>
+    <div class="sheet-foot">
+      <button class="btn primary" id="sheet-close" type="button">סגירה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DATA = /*{{DATA}}*/null;
+
+  var CATEGORY_HE = {
+    culture: "תרבות ובידור", food: "מזון ומסעדות", travel: "טיסות ונופש",
+    fashion: "אופנה", electronics: "חשמל וטכנולוגיה", finance: "פיננסים וביטוח",
+    health: "בריאות וטיפוח", other: "אחר"
+  };
+  var SHARE_HE = {
+    transferable: "ניתן להעברה",
+    presence_required: "דורש נוכחות",
+    personal_only: "אישי בלבד"
+  };
+
+  /* Mirrors initials() in lib/format.ts. */
+  function initials(name) {
+    var parts = String(name).trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return "?";
+    if (parts.length === 1) return parts[0].slice(0, 1);
+    return parts[0][0] + parts[1][0];
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  /* Mirrors askLabel() in lib/whatsapp.ts. */
+  function askLabel(share, who) {
+    return share === "transferable" ? "בקשו מ" + who : "תאמו עם " + who;
+  }
+
+  /* Mirrors buildAskMessage() in lib/whatsapp.ts. */
+  function buildMessage(offer, asker) {
+    var lines = [];
+    lines.push("היי! " + asker + " כאן 👋");
+    lines.push("");
+    lines.push('ראיתי ב"הטבות ביחד" שיש לך ' + offer.program.name + ", ויש דרכו הטבה:");
+    lines.push(offer.title + " — " + offer.merchant);
+    lines.push("ההטבה: " + offer.discount);
+    lines.push("");
+    lines.push(offer.shareability === "transferable"
+      ? "אפשר שתזמין דרך החשבון שלך ואעביר לך את הכסף?"
+      : "אפשר שנתאם לקנות ביחד, או שתקנה ואחזיר לך?");
+    if (offer.costsQuota) {
+      lines.push("(יודע שזה מנצל לך זכאות חודשית — רק אם זה מסתדר לך)");
+    }
+    return lines.join("\n");
+  }
+
+  // ---------------------------------------------------------------- state
+  var state = { q: "", programs: {}, categories: {}, onlyOurs: false };
+  var me = DATA.members.filter(function (m) { return m.you; })[0] || DATA.members[0];
+
+  // ---------------------------------------------------------------- header
+  document.getElementById("gname").textContent = DATA.groupName;
+  document.getElementById("gsub").textContent = DATA.members.length + " חברים בקבוצה";
+
+  var roster = document.getElementById("roster");
+  DATA.members.forEach(function (m) {
+    var chip = el("span", "who" + (m.you ? " me" : ""));
+    chip.appendChild(el("span", "av", initials(m.name)));
+    chip.appendChild(document.createTextNode(m.name + (m.you ? " (אתם)" : "")));
+    roster.appendChild(chip);
+  });
+
+  // --------------------------------------------------------------- filters
+  var chipsBox = document.getElementById("chips");
+
+  function addChip(label, isOn, onToggle) {
+    var b = el("button", "chip", label);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(isOn()));
+    b.addEventListener("click", function () {
+      onToggle();
+      b.setAttribute("aria-pressed", String(isOn()));
+      render();
+    });
+    chipsBox.appendChild(b);
+  }
+
+  addChip("✅ רק מה שיש לנו",
+    function () { return state.onlyOurs; },
+    function () { state.onlyOurs = !state.onlyOurs; });
+
+  var seenPrograms = [];
+  DATA.offers.forEach(function (o) {
+    if (seenPrograms.indexOf(o.program.slug) === -1) seenPrograms.push(o.program.slug);
+  });
+  seenPrograms.forEach(function (slug) {
+    var p = DATA.offers.filter(function (o) { return o.program.slug === slug; })[0].program;
+    addChip(p.emoji + " " + p.name,
+      function () { return !!state.programs[slug]; },
+      function () { state.programs[slug] = !state.programs[slug]; });
+  });
+
+  var seenCats = [];
+  DATA.offers.forEach(function (o) {
+    if (seenCats.indexOf(o.category) === -1) seenCats.push(o.category);
+  });
+  seenCats.forEach(function (c) {
+    addChip(CATEGORY_HE[c] || c,
+      function () { return !!state.categories[c]; },
+      function () { state.categories[c] = !state.categories[c]; });
+  });
+
+  document.getElementById("q").addEventListener("input", function (e) {
+    state.q = e.target.value;
+    render();
+  });
+
+  function anyOn(map) {
+    for (var k in map) if (map[k]) return true;
+    return false;
+  }
+
+  /* Substring match over title + merchant, the same shape as the pg_trgm
+     index the real app queries. */
+  function matches(offer, query) {
+    if (!query) return true;
+    var hay = (offer.title + " " + offer.merchant).toLowerCase();
+    return query.toLowerCase().split(/\s+/).filter(Boolean).every(function (t) {
+      return hay.indexOf(t) !== -1;
+    });
+  }
+
+  // ----------------------------------------------------------------- sheet
+  var veil = document.getElementById("veil");
+  var lastFocus = null;
+
+  function openSheet(offer, holder) {
+    lastFocus = document.activeElement;
+    document.getElementById("sheet-title").textContent = askLabel(offer.shareability, holder.name);
+    document.getElementById("sheet-lede").textContent =
+      "באפליקציה האמיתית הכפתור פותח ווטסאפ ל" + holder.name + " עם ההודעה הזו מוכנה לשליחה.";
+    document.getElementById("sheet-msg").textContent = buildMessage(offer, me.name);
+    veil.hidden = false;
+    document.body.style.overflow = "hidden";
+    document.getElementById("sheet-close").focus();
+  }
+
+  function closeSheet() {
+    veil.hidden = true;
+    document.body.style.overflow = "";
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.getElementById("sheet-close").addEventListener("click", closeSheet);
+  veil.addEventListener("click", function (e) { if (e.target === veil) closeSheet(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !veil.hidden) closeSheet();
+  });
+
+  // ------------------------------------------------------------------ card
+  function card(offer) {
+    var li = el("li");
+    var art = el("article", "offer" + (offer.holders.length ? "" : " gap"));
+    art.style.setProperty("--pc", offer.program.color);
+    art.style.setProperty("--pc-d", offer.program.colorDark);
+    art.style.setProperty("--pc-soft", offer.program.soft);
+    art.style.setProperty("--pc-soft-d", offer.program.softDark);
+
+    var top = el("div", "otop");
+    top.appendChild(el("span", "badge", offer.program.emoji));
+    var meta = el("div");
+    meta.appendChild(el("p", "pname", offer.program.name));
+    meta.appendChild(el("h3", "otitle", offer.title));
+    meta.appendChild(el("p", "omerchant", offer.merchant));
+    top.appendChild(meta);
+    art.appendChild(top);
+
+    var d = el("p", "odiscount");
+    d.appendChild(el("bdi", null, offer.discount));
+    art.appendChild(d);
+
+    if (offer.description) art.appendChild(el("p", "odesc", offer.description));
+
+    var pills = el("div", "pills");
+    pills.appendChild(el("span", "pill share-" + offer.shareability, SHARE_HE[offer.shareability]));
+    pills.appendChild(el("span", "pill cat", CATEGORY_HE[offer.category] || offer.category));
+    art.appendChild(pills);
+
+    var row = el("div", "who-row");
+    if (!offer.holders.length) {
+      var gapWrap = el("div");
+      gapWrap.appendChild(el("p", "who-text", "אף אחד בקבוצה לא חבר ב" + offer.program.name + "."));
+      if (offer.program.joinUrl) {
+        var a = el("a", "joinlink", "כדאי שמישהו יצטרף →");
+        a.href = offer.program.joinUrl;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        gapWrap.appendChild(a);
+      }
+      row.appendChild(gapWrap);
+      art.appendChild(row);
+    } else {
+      var stack = el("div", "stack");
+      offer.holders.slice(0, 4).forEach(function (h) {
+        var av = el("span", "av", initials(h.name));
+        av.title = h.name;
+        stack.appendChild(av);
+      });
+      row.appendChild(stack);
+
+      var youHold = offer.holders.some(function (h) { return h.you; });
+      var others = offer.holders.filter(function (h) { return !h.you; });
+      row.appendChild(el("p", "who-text",
+        youHold && !others.length
+          ? "יש לכם את זה"
+          : "יש ל" + offer.holders.map(function (h) { return h.name; }).join(", ")));
+      art.appendChild(row);
+
+      if (offer.shareability === "personal_only") {
+        art.appendChild(el("p", "note", "הטבה אישית — לא ניתן להעביר אותה למישהו אחר."));
+      } else if (!others.length) {
+        art.appendChild(el("p", "note", "ההטבה כבר שלכם — אין את מי לבקש."));
+      } else {
+        var acts = el("div", "actions");
+        others.forEach(function (h) {
+          var b = el("button", "ask");
+          b.type = "button";
+          b.appendChild(el("span", null, "💬"));
+          b.appendChild(document.createTextNode(askLabel(offer.shareability, h.name)));
+          b.addEventListener("click", function () { openSheet(offer, h); });
+          acts.appendChild(b);
+        });
+        art.appendChild(acts);
+        if (offer.costsQuota) {
+          art.appendChild(el("p", "note quota",
+            "⚠️ שימוש בהטבה מנצל אחת מהזכאויות החודשיות של מי שתבקשו."));
+        }
+      }
+    }
+
+    if (offer.sourceUrl) {
+      var s = el("a", "srclink", "פרטי ההטבה באתר המועדון");
+      s.href = offer.sourceUrl;
+      s.target = "_blank";
+      s.rel = "noopener noreferrer";
+      art.appendChild(s);
+    }
+
+    li.appendChild(art);
+    return li;
+  }
+
+  // ---------------------------------------------------------------- render
+  var feed = document.getElementById("feed");
+  var tally = document.getElementById("tally");
+
+  function render() {
+    var q = state.q.trim();
+    var progOn = anyOn(state.programs);
+    var catOn = anyOn(state.categories);
+
+    var visible = DATA.offers.filter(function (o) {
+      if (state.onlyOurs && !o.holders.length) return false;
+      if (progOn && !state.programs[o.program.slug]) return false;
+      if (catOn && !state.categories[o.category]) return false;
+      return matches(o, q);
+    });
+
+    var gaps = DATA.offers.filter(function (o) { return !o.holders.length; }).length;
+    tally.textContent = visible.length + " הטבות" +
+      (gaps && !state.onlyOurs ? " · " + gaps + " מהן אף אחד בקבוצה לא זכאי" : "");
+
+    feed.textContent = "";
+    if (!visible.length) {
+      var box = el("div", "empty");
+      box.appendChild(el("div", null, "🔍"));
+      box.appendChild(el("strong", null, "אין הטבות שמתאימות לסינון"));
+      box.appendChild(el("p", null, "נסו לנקות חלק מהמסננים."));
+      feed.appendChild(box);
+      return;
+    }
+    var frag = document.createDocumentFragment();
+    visible.forEach(function (o) { frag.appendChild(card(o)); });
+    feed.appendChild(frag);
+  }
+
+  render();
+})();
+</script>

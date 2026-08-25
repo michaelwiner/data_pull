@@ -94,6 +94,28 @@ Auth) · deployed on Vercel. Free tiers cover a group of this size.
 
 ---
 
+## Seeing it without a backend
+
+Every route needs Supabase, but every component takes plain props — so the UI
+renders from the seed catalog with no database at all.
+
+```bash
+npm run demo    # regenerates demo/index.html from supabase/seed/*
+```
+
+`demo/build-demo.ts` imports the real `PROGRAMS` and `OFFERS` arrays, applies a
+five-member demo group, and inlines the result into a standalone page. The
+offers are never retyped, so the demo shows exactly what the app would.
+
+The demo group is arranged so every state appears: מיכאל holds לאומי בונוס and
+מילואים (the "יש לכם את זה" case), דנה and נועה both hold פיס פלוס (two ask
+buttons on one card), יוסי holds HOT, אורי holds מילואים, and **nobody holds
+American Express** — which is what turns its 8 offers into gap-analysis cards.
+
+Tapping an ask opens a preview of the Hebrew message rather than a real
+`wa.me` link: the demo members are fictional, and firing a live WhatsApp link at
+a fake number would just land on "this number is not on WhatsApp".
+
 ## Setup
 
 ```bash

@@ -33,10 +33,16 @@ export function expiryLabelHe(validUntil: string | null): string | null {
   return formatted ? `בתוקף עד ${formatted}` : null;
 }
 
-/** Two-letter avatar fallback for members with no picture. */
+/**
+ * Avatar fallback for members with no picture.
+ *
+ * One letter for a single name, two for a full one. Hebrew has no uppercase,
+ * so slicing two letters off a single name ("מיכאל" -> "מי") reads as a broken
+ * word rather than a monogram; one letter reads correctly.
+ */
 export function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0].slice(0, 2);
+  if (parts.length === 1) return parts[0].slice(0, 1);
   return parts[0][0] + parts[1][0];
 }

@@ -8,6 +8,7 @@ import {
   toWaMeNumber,
 } from "../lib/whatsapp";
 import type { OfferWithHolders } from "../lib/types";
+import { initials } from "../lib/format";
 
 describe("normalizeIsraeliPhone", () => {
   it("normalizes the shapes people actually type", () => {
@@ -156,5 +157,23 @@ describe("buildWhatsAppLink", () => {
   it("returns null when the holder has no usable phone on file", () => {
     expect(buildWhatsAppLink(null, "hi")).toBeNull();
     expect(buildWhatsAppLink("", "hi")).toBeNull();
+  });
+});
+
+describe("initials", () => {
+  it("uses one letter for a single Hebrew name", () => {
+    // Hebrew has no uppercase, so two letters read as a broken word.
+    expect(initials("מיכאל")).toBe("מ");
+    expect(initials("דנה")).toBe("ד");
+  });
+
+  it("uses one letter per part for a full name", () => {
+    expect(initials("מיכאל וינר")).toBe("מו");
+    expect(initials("Dana Levy")).toBe("DL");
+  });
+
+  it("falls back for empty input", () => {
+    expect(initials("")).toBe("?");
+    expect(initials("   ")).toBe("?");
   });
 });
